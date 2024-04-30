@@ -3,34 +3,41 @@
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 
-template <class T>
+template <typename T, size_t N>
 class TPQueue {
 private:
-    std::vector<T> data;
-
+    T data[N];
+    size_t size;
 public:
-    void push(const T& elem) {
-        int i = 0;
-        for (i = 0; i < data.size(); ++i) {
-            if (elem.prior > data[i].prior) {
-                break;
-            }
+    TPQueue() : size(0) {}
+
+    void push(const T& item) {
+        if (size == N) {
+            std::cerr << "Queue is full!" << std::endl;
+            return;
         }
-        data.insert(data.begin() + i, elem);
-    }
 
-    void pop() {
-        if (!data.empty()) {
-            data.erase(data.begin());
+        size_t i = size;
+        while (i > 0 && item.prior > data[i - 1].prior) {
+            data[i] = data[i - 1];
+            i--;
         }
+        data[i] = item;
+        size++;
     }
 
-    T front() const {
-        return data.front();
-    }
+    T pop() {
+        if (size == 0) {
+            std::cerr << "Queue is empty!" << std::endl;
+            return T();
+        }
 
-    bool empty() const {
-        return data.empty();
+        T item = data[0];
+        for (size_t i = 1; i < size; ++i) {
+            data[i - 1] = data[i];
+        }
+        size--;
+        return item;
     }
 };
-#endif  // INCLUDE_TPQUEUE_H_
+#endif  
