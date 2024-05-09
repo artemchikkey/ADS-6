@@ -4,34 +4,31 @@
 
 template<typename T, int size>
 class TPQueue {
-private:
-  T arr[100] = {};
-  int ind = 0, S = 0;
-
+ private:
+T data[100] = {};
+int i = 0, start = 0;
  public:
-  T pop() {
-    S = S + 1;
-    return arr[S - 1];
-  }
-
-  void push(T elem) {
-    arr[ind] = elem;
-    ind = ind + 1;
-    for (int i = S; i < ind; i++) {
-      for (int j = S; j < ind - 1; j++) {
-        if (arr[j].prior < arr[j + 1].prior) {
-          T boofer = arr[j];
-          arr[j] = arr[j + 1];
-          arr[j + 1] = boofer;
-        }
+T pop() {
+  start = start + 1;
+  return data[start - 1];
+}
+void push(T el) {
+  data[i] = el;
+  i += 1;
+  for (int l = start; l < i; l++) {
+    for (int i = start; i < i - 1; i++) {
+      if (data[i + 1].prior > data[i].prior) {
+        T k = data[i];
+        data[i] = data[i + 1];
+        data[i + 1] = k;
       }
     }
   }
+}
 };
 
 struct SYM {
   char ch;
   int prior;
 };
-
-#endif  // INCLUDE_TPQUEUE_H_
+#endif
