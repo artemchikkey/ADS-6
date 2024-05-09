@@ -1,43 +1,36 @@
 // Copyright 2022 NNTU-CS
-#include <vector>
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 
 template <typename T, size_t N>
 class TPQueue {
-private:
-    T data[N];
-    size_t size;
-public:
-    TPQueue() : size(0) {}
+ private:
+  T arr[100] = {};
+  int ind = 0, S = 0;
 
-    void push(const T& item) {
-        if (size == N) {
-            std::cerr << "Queue is full!" << std::endl;
-            return;
-        }
+ public:
+  T pop() {
+    S = S + 1;
+    return arr[S - 1];
+  }
 
-        size_t i = size;
-        while (i > 0 && item.prior > data[i - 1].prior) {
-            data[i] = data[i - 1];
-            i--;
+  void push(T elem) {
+    arr[ind] = elem;
+    ind = ind + 1;
+    for (int i = S; i < ind; i++) {
+      for (int j = S; j < ind - 1; j++) {
+        if (arr[j].prior < arr[j + 1].prior) {
+          T boofer = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = boofer;
         }
-        data[i] = item;
-        size++;
+      }
     }
-
-    T pop() {
-        if (size == 0) {
-            std::cerr << "Queue is empty!" << std::endl;
-            return T();
-        }
-
-        T item = data[0];
-        for (size_t i = 1; i < size; ++i) {
-            data[i - 1] = data[i];
-        }
-        size--;
-        return item;
-    }
+  }
 };
-#endif  
+
+struct SYM {
+  char ch;
+  int prior;
+};
+#endif
